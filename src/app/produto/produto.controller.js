@@ -2,25 +2,23 @@ angular.module('produto.controllers.ProdutoCtrl', [])
 .controller('ProdutoCtrl', function($scope,ProdutoService,$mdDialog,$mdToast) {
   
   //Pega a lista de produtos
-  $scope.readProducts = function(){
-    // use products factory
-    ProdutoService.readProducts().then(function successCallback(response){
+  $scope.listaProdutos = function(){
+    ProdutoService.listaProdutos().then(function successCallback(response){
       $scope.produtos = response.data;
     }, function errorCallback(response){
-      $scope.showToast("Problema ao pegar as informações");
+      $scope.showToast("Problema ao pegar a lista de produto");
     });
   }
   
-  
-  //Mostra modal com o formulario de produto
-  $scope.showCreateProductForm = function(event){
+  //Mostra modal com o formulario de criação de produtos
+  $scope.mostraFormCriarProdutos = function(event){
     $mdDialog.show({
-      templateUrl: 'produto/create_product.template.html',
+      templateUrl: 'produto/template/create_product.template.html',
       parent: angular.element(document.body),
       clickOutsideToClose: true,
       scope: $scope,
       preserveScope: true,
-      fullscreen: true, // Only for -xs, -sm breakpoints.
+      fullscreen: true, 
       controller: function($scope, $mdDialog) {
         $scope.cancel = function() {
           $mdDialog.cancel();
@@ -29,24 +27,22 @@ angular.module('produto.controllers.ProdutoCtrl', [])
     });
   }
   
-  // create new product
-  $scope.createProduct = function(){
-    ProdutoService.createProduct($scope).then(function successCallback(response){
-      console.log("Criando produto")
-      // tell the user new product was created
-      $scope.showToast("Funcionou");
-      // refresh the list
-      $scope.readProducts();
-      // close dialog
+  //Evento botão de crição de produto
+  $scope.criaProduto = function(){
+    
+    ProdutoService.criaProduto($scope).then(function successCallback(response){
+      $scope.showToast("Produto criado com sucesso");
+      $scope.listaProdutos();
       $scope.cancel();
-      // remove form values
-      $scope.clearProductForm();
+      $scope.limpaFormProduto();
+      
     }, function errorCallback(response){
       $scope.showToast("Unable to create record.");
     });
   }
   
-  $scope.clearProductForm = function(){
+  //Limpa formulario de produto
+  $scope.limpaFormProduto = function(){
     $scope.id = "";
     $scope.name = "";
     $scope.description = "";
@@ -65,87 +61,108 @@ angular.module('produto.controllers.ProdutoCtrl', [])
     }
     
     
-    $scope.readOneProduct = function(id){
-      
-      // get product to be edited
-      ProdutoService.readOneProduct(id).then(function successCallback(response){
-        
-        // put the values in form
+    $scope.lerProduto = function(id){
+      ProdutoService.lerProduto(id).then(function successCallback(response){
         $scope.id = response.data.id;
         $scope.name = response.data.name; 
         $scope.description = response.data.description;
         $scope.price = response.data.price;
-         $mdDialog.show({ 
-           controller: DialogController, 
-           templateUrl: './app/produto/read_one_product.template.html', 
-           parent: angular.element(document.body), 
-           clickOutsideToClose: true, 
-           scope: $scope, 
-           preserveScope: true, 
-           fullscreen: true }).
-           then( function(){},
-        // user clicked 'Cancel'
-        function() {
-          // clear modal content
-          $scope.clearProductForm();
-        } ); }, function errorCallback(response){ $scope.showToast("Unable to retrieve record."); }); }
-
-
-        $scope.showUpdateProductForm = function(id){
-
-          // get product to be edited
-          productsFactory.readOneProduct(id).then(function successCallback(response){
-      
-              // put the values in form
-              $scope.id = response.data.id;
-      $scope.name = response.data.name;
-      $scope.description = response.data.description;
-      $scope.price = response.data.price;
-      $mdDialog.show({
-                  controller: DialogController,
-                  templateUrl: './app/products/update_product.template.html',
-                  parent: angular.element(document.body),
-                  targetEvent: event,
-                  clickOutsideToClose: true,
-                  scope: $scope,
-                  preserveScope: true,
-                  fullscreen: true
-              }).then(
-                  function(){},
-      
-                  // user clicked 'Cancel'
-                  function() {
-                      // clear modal content
-                      $scope.clearProductForm();
+        $mdDialog.show({ 
+          controller: function($scope, $mdDialog) {
+            $scope.cancel = function() {
+              $mdDialog.cancel();
+            };
+          }, 
+          templateUrl: './app/produto/template/read_one_product.template.html', 
+          parent: angular.element(document.body), 
+          clickOutsideToClose: true, 
+          scope: $scope, 
+          preserveScope: true, 
+          fullscreen: true }).
+          then( function(){},
+          function() {
+            $scope.limpaFormProduto();
+          } ); 
+        },function errorCallback(response){ 
+          $scope.showToast("Não conseguiu ler o produto especificado");
+        }); 
       }
-              );
-      }, function errorCallback(response){
-              $scope.showToast("Unable to retrieve record.");
-      });
-      }
-
-
-      // update product record / save changes
-$scope.updateProduct = function(){
-
-  productsFactory.updateProduct($scope).then(function successCallback(response){
-
-      // tell the user product record was updated
-      $scope.showToast(response.data.message);
-// refresh the product list
-      $scope.readProducts();
-// close dialog
-      $scope.cancel();
-// clear modal content
-      $scope.clearProductForm();
-},
-  function errorCallback(response) {
-      $scope.showToast("Unable to update record.");
-});
-}
-
+      
+      
+      $scope.mostraFormularioAtualiza = function(id){
+        productsFactory.readOneProduct(id).then(function successCallback(response){
+          
+          $scope.id = response.data.id;
+          $scope.name = response.data.name;
+          $scope.description = response.data.description;
+          $scope.price = response.data.price;
+          $mdDialog.show({
+            controller: function($scope, $mdDialog) {
+              $scope.cancel = function() {
+                $mdDialog.cancel();
+              };
+            },
+            templateUrl: './app/produto/template/update_product.template.html',
+            parent: angular.element(document.body),
+            targetEvent: event,
+            clickOutsideToClose: true,
+            scope: $scope,
+            preserveScope: true,
+            fullscreen: true
+          }).then(
+            function(){},
+            function() {
+              $scope.limpaFormProduto();
+            }
+            );
+          }, function errorCallback(response){
+            $scope.showToast("Não conseguiu ler o produto especificado");
+          });
+        }
         
-});
-      
-      
-      
+        
+        //Executa evento de atualização de produto
+        $scope.atualizaProduto = function(){
+          productsFactory.atualizaProduto($scope).then(function successCallback(response){
+            
+            $scope.showToast(response.data.message);
+            $scope.listaProdutos();
+            $scope.cancel();
+            $scope.limpaFormProduto();
+          },
+          function errorCallback(response) {
+            $scope.showToast("Não foi possivel atualizar o produto.");
+          });
+        }
+        
+        $scope.confirmaDelecaoProduto = function(event, id){
+          $scope.id = id;
+          var confirm = $mdDialog.confirm()
+          .title('Tem certeza?')
+          .textContent('Seu produto será deletado')
+          .targetEvent(event)
+          .ok('Sim')
+          .cancel('Não');
+          $mdDialog.show(confirm).then(
+            function() {
+              $scope.deletaProduto();
+            },
+            function() {}
+            );
+          }
+          
+          
+          $scope.deletaProduto = function(){
+            
+            productsFactory.deletaProduto($scope.id).then(function successCallback(response){
+              $scope.showToast(response.data.message);
+              // refresh the list
+              $scope.listaProdutos();
+            }, function errorCallback(response){
+              $scope.showToast("Unable to delete record.");
+            });
+          }
+        });
+        
+        
+        

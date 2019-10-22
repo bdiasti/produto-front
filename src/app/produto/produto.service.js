@@ -3,12 +3,11 @@ angular.module('produto.services.ProdutoService', [])
   
   var factory = {};
   
-  factory.readProducts = function(){
+  factory.listaProdutos = function(){
     return $http.get(`${BASE_URL}typicode/demo/posts/`);
   };
   
-  
-  factory.createProduct = function($scope){
+  factory.criaProduto = function($scope){
     var  data =  {
       'name' : $scope.name,
       'description' : $scope.description,
@@ -17,26 +16,29 @@ angular.module('produto.services.ProdutoService', [])
     }
     return $http.post(`${BASE_URL}typicode/demo/posts/`,data)
   };
-
-   factory.readOneProduct = function(id){ 
-     return $http.get(`${BASE_URL}typicode/demo/posts/${id}`);
-   }
-
-   // update product
-factory.updateProduct = function($scope){
-
-  return $http({
-      method: 'POST',
-      data: {
-          'id' : $scope.id,
-          'name' : $scope.name,
-          'description' : $scope.description,
-          'price' : $scope.price,
-          'category_id' : 1
-      },
-      url: 'http://localhost/api/product/update.php'
-  });
-};
-// deleteProduct will be here
+  
+  factory.lerProduto = function(id){ 
+    return $http.get(`${BASE_URL}typicode/demo/posts/${id}`);
+  }
+  
+  factory.atualizaProduto = function($scope){
+    var  data =  {
+      'id' : $scope.id,
+      'name' : $scope.name,
+      'description' : $scope.description,
+      'price' : $scope.price,
+      'category_id' : 1
+    }
+    return $http.put(`${BASE_URL}typicode/demo/posts/`,data);
+  };
+  
+  factory.deletaProduto = function(id){
+    
+    var  data =  {
+      'id' : id
+    }
+    return $http.delete(`${BASE_URL}typicode/demo/posts/`,data);
+  };
+  
   return factory;
 });

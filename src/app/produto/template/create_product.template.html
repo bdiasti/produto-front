@@ -3,14 +3,12 @@
 
         <md-toolbar>
             <div class="md-toolbar-tools">
-                <h2>Crie produtos</h2>
+                <h2>Cria produto</h2>
             </div>
         </md-toolbar>
 
         <md-dialog-content>
             <div class="md-dialog-content">
-
-                <!-- we are using ng-model to bind this view and the 'product model -->
                 <md-input-container class="md-block">
                     <label>Name</label>
                     <input ng-model="name">
@@ -30,8 +28,8 @@
         </md-dialog-content>
 
         <md-dialog-actions layout="row">
-            <md-button ng-click="cancel()">Cancel</md-button>
-            <md-button ng-click="createProduct()" class="md-primary">Create</md-button>
+            <md-button ng-click="cancel()">Cancela</md-button>
+            <md-button ng-click="criaProduto()" class="md-primary">Criar</md-button>
         </md-dialog-actions>
     </form>
 </md-dialog>
