@@ -1,0 +1,12 @@
+<!-- Define a toolbar com titulo e cor azul -->
+<div ng-include="'toolbar/toolbar.view.html'"></div>
+
+<div flex layout="row">
+
+  <!-- Define a sidebar que representa os itens de menu-->
+  <div ng-include="'sidenav/sidenav.view.html'" layout="column"></div>
+
+  <!-- Exibe conteúdo principal -->
+  <div ui-view flex></div>
+</div>
+
