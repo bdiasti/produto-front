@@ -4,40 +4,37 @@ angular.module('produto.services.ProdutoService', [])
   var factory = {};
   
   factory.listaProdutos = function(){
-    return $http.get(`${BASE_URL}typicode/demo/posts/`);
+    return $http.get(`${BASE_URL}produto`);
   };
   
   factory.criaProduto = function($scope){
     var  data =  {
-      'name' : $scope.name,
-      'description' : $scope.description,
-      'price' : $scope.price,
-      'category_id' : 1
+      'nome' : $scope.nome,
+      'descricao' : $scope.descricao,
+      'quantidade' : $scope.quantidade,
+      'codigoBarra' : $scope.codigoBarra,
+      'categoria' : $scope.categoria
     }
-    return $http.post(`${BASE_URL}typicode/demo/posts/`,data)
+    return $http.post(`${BASE_URL}produto`,data)
   };
   
   factory.lerProduto = function(id){ 
-    return $http.get(`${BASE_URL}typicode/demo/posts/${id}`);
+    return $http.get(`${BASE_URL}produto/${id}`);
   }
   
   factory.atualizaProduto = function($scope){
     var  data =  {
-      'id' : $scope.id,
-      'name' : $scope.name,
-      'description' : $scope.description,
-      'price' : $scope.price,
-      'category_id' : 1
+      'nome' : $scope.nome,
+      'descricao' : $scope.descricao,
+      'quantidade' : $scope.quantidade,
+      'codigoBarra' : $scope.codigoBarra,
+      'categoria' : $scope.categoria
     }
-    return $http.put(`${BASE_URL}typicode/demo/posts/`,data);
+    return $http.put(`${BASE_URL}produto/${$scope.id}`,data);
   };
   
   factory.deletaProduto = function(id){
-    
-    var  data =  {
-      'id' : id
-    }
-    return $http.delete(`${BASE_URL}typicode/demo/posts/`,data);
+    return $http.delete(`${BASE_URL}produto/${id}`);
   };
   
   return factory;

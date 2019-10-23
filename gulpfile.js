@@ -10,12 +10,31 @@ var $           = require('gulp-load-plugins')();
 var config      = require('./gulp_config.js');
 var pkg         = require('./package.json');
 
+var connect = require('gulp-connect');
+var proxy = require('http-proxy-middleware');
+
 /**
  * Default tasks
  */
-gulp.task('default', ['serve']);
+gulp.task('default', ['connect']);
 gulp.task('build', ['clean', 'scripts', 'sass', 'templates', 'minify:images', 'browserify', 'copy:vendor:css', 'copy:index', 'copy:assets']);
 gulp.task('test', ['eslint', 'unit', 'e2e']);
+
+
+gulp.task('connect', ['build', 'watch'], function() {
+  connect.server({
+      root: [config.serve.baseDir],
+      middleware: function(connect, opt) {
+          return [
+              proxy('/api', {
+                  target: 'http://localhost:9000',
+                  changeOrigin:true
+              })
+          ]
+      }
+
+  });
+});
 
 /**
  * Tasks needed to update/run protractor.

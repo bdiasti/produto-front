@@ -16,7 +16,6 @@ module.exports = function(config) {
     // List of files / patterns to load into the browser during testing.
     files: [
       'node_modules/angular/angular.js',
-      'node_modules/angular-mocks/angular-mocks.js',
       'node_modules/angular-ui-router/release/angular-ui-router.js',
       'src/app/**/*.js',
       'src/app/**/*.spec.js'
@@ -58,7 +57,7 @@ module.exports = function(config) {
 
     // Level of logging
     // Possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-    logLevel: config.LOG_DISABLE,
+    logLevel: config.LOG_DEBUG,
 
 
     // Enable / disable watching file and executing tests whenever any file changes

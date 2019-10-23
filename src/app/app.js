@@ -35,7 +35,7 @@ angular.module('angular-material-boilerplate', [
     .accentPalette('purple', {
       'default': '200'
     });
-}).constant('BASE_URL', 'https://my-json-server.typicode.com/')
+}).constant('BASE_URL', 'http://localhost:8080/api/')
 
 .run(['$state', function ($state) {
   $state.go('produto');

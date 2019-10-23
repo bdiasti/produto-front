@@ -44,9 +44,10 @@ angular.module('produto.controllers.ProdutoCtrl', [])
   //Limpa formulario de produto
   $scope.limpaFormProduto = function(){
     $scope.id = "";
-    $scope.name = "";
-    $scope.description = "";
-    $scope.price = "";
+    $scope.nome = "";
+    $scope.descricao = "";
+    $scope.quantidade = "";
+    $scope.categoria = "";
   }
   
   
@@ -64,8 +65,8 @@ angular.module('produto.controllers.ProdutoCtrl', [])
     $scope.lerProduto = function(id){
       ProdutoService.lerProduto(id).then(function successCallback(response){
         $scope.id = response.data.id;
-        $scope.name = response.data.name; 
-        $scope.description = response.data.description;
+        $scope.nome = response.data.nome; 
+        $scope.descricao = response.data.descricao;
         $scope.price = response.data.price;
         $mdDialog.show({ 
           controller: function($scope, $mdDialog) {
@@ -73,7 +74,7 @@ angular.module('produto.controllers.ProdutoCtrl', [])
               $mdDialog.cancel();
             };
           }, 
-          templateUrl: './app/produto/template/read_one_product.template.html', 
+          templateUrl: 'produto/template/read_one_product.template.html', 
           parent: angular.element(document.body), 
           clickOutsideToClose: true, 
           scope: $scope, 
@@ -90,19 +91,17 @@ angular.module('produto.controllers.ProdutoCtrl', [])
       
       
       $scope.mostraFormularioAtualiza = function(id){
-        productsFactory.readOneProduct(id).then(function successCallback(response){
-          
+        ProdutoService.lerProduto(id).then(function successCallback(response){     
           $scope.id = response.data.id;
-          $scope.name = response.data.name;
-          $scope.description = response.data.description;
-          $scope.price = response.data.price;
+          $scope.nome = response.data.nome;
+          $scope.descricao = response.data.descricao;
           $mdDialog.show({
             controller: function($scope, $mdDialog) {
               $scope.cancel = function() {
                 $mdDialog.cancel();
               };
             },
-            templateUrl: './app/produto/template/update_product.template.html',
+            templateUrl: 'produto/template/update_product.template.html',
             parent: angular.element(document.body),
             targetEvent: event,
             clickOutsideToClose: true,
@@ -123,9 +122,9 @@ angular.module('produto.controllers.ProdutoCtrl', [])
         
         //Executa evento de atualização de produto
         $scope.atualizaProduto = function(){
-          productsFactory.atualizaProduto($scope).then(function successCallback(response){
+          ProdutoService.atualizaProduto($scope).then(function successCallback(response){
             
-            $scope.showToast(response.data.message);
+            $scope.showToast("Produto atualizado com sucesso");
             $scope.listaProdutos();
             $scope.cancel();
             $scope.limpaFormProduto();
@@ -135,7 +134,7 @@ angular.module('produto.controllers.ProdutoCtrl', [])
           });
         }
         
-        $scope.confirmaDelecaoProduto = function(event, id){
+        $scope.confirmaDelecaoProduto = function(id){
           $scope.id = id;
           var confirm = $mdDialog.confirm()
           .title('Tem certeza?')
@@ -151,15 +150,12 @@ angular.module('produto.controllers.ProdutoCtrl', [])
             );
           }
           
-          
           $scope.deletaProduto = function(){
-            
-            productsFactory.deletaProduto($scope.id).then(function successCallback(response){
-              $scope.showToast(response.data.message);
-              // refresh the list
+            ProdutoService.deletaProduto($scope.id).then(function successCallback(response){
+              $scope.showToast("Produto deletado com sucesso");
               $scope.listaProdutos();
             }, function errorCallback(response){
-              $scope.showToast("Unable to delete record.");
+              $scope.showToast("Problema ao deletar produto ");
             });
           }
         });

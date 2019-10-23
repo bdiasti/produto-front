@@ -5,7 +5,7 @@ exports.config = {
   //'seleniumAddress': 'http://localhost:4444/wd/hub',
 
   // The base url your app is served on.
-  baseUrl: 'http://localhost:3000/',
+  baseUrl: 'http://localhost:8080/',
 
   // Jasmine is fully supported as a test and assertion framework.
   framework: 'jasmine',
